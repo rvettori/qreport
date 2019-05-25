@@ -5,6 +5,12 @@ class DB(object):
     def __init__(self, database_url):
         self.db = dataset.connect(database_url)
 
+
+    def query(self, sql, *args, **kwargs):
+        rows = self.db.query(sql, args, kwargs)
+        return [dict(r) for r in rows]
+
+
     def get_data(self, sql, columns=[], order='', params={}, conditions={}):
 
         s_from = '({}) t'.format(sql)

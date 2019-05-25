@@ -1,5 +1,6 @@
 import qreport
 from jinja2 import Environment, FileSystemLoader
+from collections import defaultdict
 from .db import DB
 from enum import Enum
 import re
@@ -20,7 +21,7 @@ class Report:
         HIDDEN='hidden'
 
     def __init__(self, database_url='sqlite://'):
-        self._database_url = database_url
+        self.db = DB(database_url)
         self._title = ''
         self._title = ''
         self._conditions = {}
@@ -30,6 +31,7 @@ class Report:
         self._params = {}
         self._callback_columns = {}
         self._field_types = {}
+        self._callback_footer = None
 
     def set_database_url(self, database_url):
         self._database_url = database_url
@@ -67,6 +69,22 @@ class Report:
         self._callback_columns[field] = fn
         return self
 
+    def callback_footer(self, fn):
+        """
+        Arguments: template, data
+        Returns: (template, row)
+        Example:
+            r = Report('')
+            def fn(template, data):
+                template = "<tr><th> {nome} </th><th>{telefone}</th></tr>"
+                row = {'nome': 'total', 'telefone': '40'}
+                return (template, row)
+
+            r.callback_footer(fn)
+        """
+        self._callback_footer = fn
+        return self
+
     def set_field_type(self, field, field_type=FieldType.STRING, *args, **kwargs):
         """
         - dropdown: use args and/or kwargs to populate a list of options
@@ -80,21 +98,33 @@ class Report:
         return self
 
     def get_context(self):
-        db = DB(self._database_url)
-
         prefix = 'filter'
         params = {re.sub('^%s[.]' % prefix, '', it[0]): it[1]
                   for it in self._params.items() if it[0].startswith(prefix)}
 
-        data = db.get_data(sql=self._sql, columns=self._columns,
+        data = self.db.get_data(sql=self._sql, columns=self._columns,
             params=params, conditions=self._conditions)
+
+        # Informed or default
+        columns = self._columns if self._columns else (data[0] or {}).keys()
+
+        footer = ''
+        if self._callback_footer:
+            # sorry :(
+            template_footer = ''.join(['<th><%{}%></th>'.format(c) for c in columns]).replace('<%','{').replace('%>','}')
+            _template, _row = self._callback_footer(template_footer, data)
+            d = defaultdict(str)
+            d.update(_row)
+            _template = _template.replace('{', '{0[').replace('}', ']}')
+            footer = _template.format(d)
 
         return {
             'title': self._title,
-            'columns': self._columns,
+            'columns': columns,
             'filters': self._filters,
             'display_as': self._display_as,
             'callback_columns': self._callback_columns,
+            'footer': footer,
             'field_types': self._field_types,
             'data': data,
             'params': params,

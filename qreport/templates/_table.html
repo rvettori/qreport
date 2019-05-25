@@ -4,7 +4,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        {% set _columns = columns if columns else (data[0] or {}).keys() %}
+                        {% set _columns = columns %}
                         {% for c in _columns %}
                             {% set _title = display_as.get(c, c.replace('_', ' ')) %}
                             <th scope="col" data-sortable="true" data-field="{{ c }}">{{ _title | capitalize }}</th>
@@ -30,6 +30,12 @@
                         </tr>
                     {% endfor %}
                 </tbody>
+
+                {% if footer %}
+                <tfoot>
+                    {{ footer }}
+                </tfoot>
+                {% endif %}
             </table>
         </div>
     </div>

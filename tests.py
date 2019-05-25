@@ -101,6 +101,16 @@ class QReportTest(unittest.TestCase):
         self.assertIsInstance(instance, Report)
         self.assertIs(fn, self.report._callback_columns['title'])
 
+    def test_callback_footer(self):
+        def fn(template, data):
+            template = "<tr><th>{title}</th></tr>"
+            row = {'title': 'my title in footer'}
+            return (template, row)
+
+        instance = self.report.callback_footer(fn)
+        self.assertIsInstance(instance, Report)
+        self.assertIs(fn, self.report._callback_footer)
+
     def test_set_field_type(self):
         instance = self.report.set_field_type('string', Report.FieldType.STRING)
         instance.set_field_type('inteiro', Report.FieldType.INT, format='0')

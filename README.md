@@ -44,4 +44,20 @@ Permit callback of columns
 r.callback_column('field1', lambda value, row: '<b>{}</b>'.format(value))
 ```
 
+Permit callback of footer. If exists then show footer
+```
+def fn(template, data):
+        template = """
+        <tr>
+            <th colspan=5>{label}</th>
+            <th>{count}</th>
+        </tr>
+        """
+
+        row = {'label': 'Linhas', 'count':  len(data) }
+        return (template, {})
+
+    r.callback_footer(fn)
+```
+
 
