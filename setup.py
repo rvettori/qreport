@@ -2,8 +2,8 @@ from setuptools import setup
 
 
 setup(name='qreport',
-      version='0.2',
-      description='Simple report',
+      version='0.3',
+      description='Simple Report',
       url='https://github.com/rvettori/qreport',
       author='Rafael Vettori',
       author_email='rafael.vettori@gmail.com',
@@ -15,4 +15,12 @@ setup(name='qreport',
             'jinja2',
       ],
       zip_safe=False,
+      package_data={'qreport': [
+          'templates/index.html',
+          'templates/_filter.html',
+          'templates/_forms.html',
+          'templates/_table.html',
+          'templates/_title.html',
+          'templates/_script.js',
+      ]}
 )

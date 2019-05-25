@@ -1,7 +1,9 @@
+import qreport
 from jinja2 import Environment, FileSystemLoader
 from .db import DB
 from enum import Enum
 import re
+import os
 
 class Report:
 
@@ -102,7 +104,7 @@ class Report:
     def render(self):
         # Validate required
         # templating
-        file_loader = FileSystemLoader('./qreport/templates')
+        file_loader = FileSystemLoader(qreport.REPORT_TEMPLATE_PATH)
         env = Environment(loader=file_loader)
         template = env.get_template('index.html')
 

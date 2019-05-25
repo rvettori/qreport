@@ -14,13 +14,14 @@ class DB(object):
         params.pop('_from', None)
         params.pop('_select', None)
 
-        q = qfilter({
+        _filters = {
             '_from': s_from,
             '_select': s_select,
             '_order': s_order,
-            **params,
-            **conditions,
-        }, sanitize_from=False)
+        }
+        _filters.update(params)
+        _filters.update(conditions)
+        q = qfilter(_filters, sanitize_from=False)
 
         # TODO: try/except and loggin error
         rows = self.db.query(q.sql, q.data)
