@@ -21,7 +21,7 @@ class DB(object):
         }
         _filters.update(params)
         _filters.update(conditions)
-        q = qfilter(_filters, sanitize_from=False)
+        q = qfilter(_filters, sanitize_from=False, quote_fields=False)
 
         # TODO: try/except and loggin error
         rows = self.db.query(q.sql, q.data)
