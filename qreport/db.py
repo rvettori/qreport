@@ -7,7 +7,7 @@ class DB(object):
 
 
     def query(self, sql, *args, **kwargs):
-        rows = self.db.query(sql, args, kwargs)
+        rows = self.db.query(sql, *args, **kwargs)
         return [dict(r) for r in rows]
 
 

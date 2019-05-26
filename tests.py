@@ -37,11 +37,6 @@ class QReportTest(unittest.TestCase):
     def setUp(self):
         self.report = Report()
 
-    def test_set_database_url(self):
-        url = 'postgres://'
-        self.assertIsInstance(self.report.set_database_url(url), Report)
-        self.assertEqual(url, self.report._database_url)
-
     def test_set_title(self):
         title = 'My Report'
         self.assertIsInstance(self.report.set_title(title), Report)
@@ -133,6 +128,9 @@ class QReportTest(unittest.TestCase):
             with self.subTest(): self.assertIs(type(it[0]), str)
             with self.subTest(): self.assertIs(type(it[1]), tuple)
 
+    def test_query(self):
+        result = self.report.query("select 123 as test ")
+        self.assertEqual([{"test": 123}], result)
 
 if __name__ == '__main__':
     unittest.main()

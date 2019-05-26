@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='qreport',
-      version='0.4',
+      version='0.5',
       description='Simple Report',
       url='https://github.com/rvettori/qreport',
       author='Rafael Vettori',

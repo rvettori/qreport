@@ -33,10 +33,6 @@ class Report:
         self._field_types = {}
         self._callback_footer = None
 
-    def set_database_url(self, database_url):
-        self._database_url = database_url
-        return self
-
     def set_title(self, title):
         self._title = title
         return self
@@ -96,6 +92,9 @@ class Report:
         ftype = field_type.value if type(field_type) is self.FieldType else field_type
         self._field_types[field] = (ftype, opts)
         return self
+
+    def query(self, sql, *args, **kwargs):
+        return self.db.query(sql, *args, **kwargs)
 
     def get_context(self):
         prefix = 'filter'
