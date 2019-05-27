@@ -14,7 +14,7 @@ class DB(object):
     def get_data(self, sql, columns=[], order='', params={}, conditions={}):
 
         s_from = '({}) t'.format(sql)
-        s_select = ','.join(columns) or '*'
+        # s_select = ','.join(columns) or '*'
         s_order = order
 
         params.pop('_from', None)
@@ -22,7 +22,7 @@ class DB(object):
 
         _filters = {
             '_from': s_from,
-            '_select': s_select,
+            # '_select': s_select,
             '_order': s_order,
         }
         _filters.update(params)
