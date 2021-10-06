@@ -1,4 +1,4 @@
-# qfilter
+# qreport
 Simple report using: jinja2, dataset, qfilter and bootstrap
 
 ## usage
